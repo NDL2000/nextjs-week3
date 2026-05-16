@@ -12,6 +12,11 @@ export type TaskState = {
     status?: string[];
   };
   message?: string;
+  values?: {
+    title?: string;
+    description?: string;
+    status?: string;
+  };
 };
 
 export async function createTaskAction(
@@ -38,7 +43,14 @@ export async function createTaskAction(
         if (!fieldErrors[field]) fieldErrors[field] = [];
         fieldErrors[field].push(err.message);
       }
-      return { errors: fieldErrors as TaskState["errors"] };
+      return { 
+        errors: fieldErrors as TaskState["errors"],
+        values: {
+          title: data.title,
+          description: data.description,
+          status: data.status,
+        }
+      };
     }
     return { message: error.message };
   }
