@@ -26,9 +26,8 @@ export const taskService = {
   getAll: async (
     userId: string,
     page: number = 1,
-    status?: string,
   ): Promise<{ data: Task[]; count: number }> => {
-    return await taskRepo.findAll(userId, page, status);
+    return await taskRepo.findAll(userId, page);
   },
 
   getAllForStats: async (userId: string): Promise<Task[]> => {
