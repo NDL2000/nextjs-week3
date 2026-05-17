@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { loginAction, AuthState } from "@/actions/auth.action";
 import Link from "next/link";
+import SubmitButton from "@/components/SubmitButton";
 
 const initialState: AuthState = {};
 
@@ -83,12 +84,8 @@ export default function Page() {
               )}
             </div>
 
-            <button
-              type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-xl text-sm transition-colors mt-1"
-            >
-              Sign In
-            </button>
+            <SubmitButton label="Sign In" loadingLabel="Signing in..." />
+
           </form>
 
           <p className="text-center text-sm text-gray-500 mt-6">
