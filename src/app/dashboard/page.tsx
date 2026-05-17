@@ -105,6 +105,9 @@ export default async function Page({
                     Title
                   </th>
                   <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Description
+                  </th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                     Status
                   </th>
                   <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
@@ -129,6 +132,9 @@ export default async function Page({
                   >
                     <td className="px-5 py-4 font-medium text-gray-800">
                       {task.title}
+                    </td>
+                    <td className="px-5 py-4 text-gray-600 text-sm max-w-xs truncate">
+                      {task.description || "—"}
                     </td>
                     <td className="px-5 py-4">
                       <span

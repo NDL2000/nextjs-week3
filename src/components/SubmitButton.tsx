@@ -14,7 +14,7 @@ export default function SubmitButton({ label, loadingLabel }: Props) {
     <button
       type="submit"
       disabled={pending}
-      className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-70 disabled:cursor-not-allowed text-white font-medium py-3 rounded-xl text-sm transition-colors mt-1 flex items-center justify-center gap-2"
+      className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-70 disabled:cursor-not-allowed text-white font-medium py-3 rounded-xl text-sm transition-colors flex items-center justify-center gap-2"
     >
       {pending && (
         <svg
