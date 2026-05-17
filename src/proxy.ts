@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 const protectedRoutes = ["/dashboard", "/tasks"];
 const publicRoutes = ["/login", "/register"];
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const session = request.cookies.get("session");
 
