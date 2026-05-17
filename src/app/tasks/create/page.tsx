@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { createTaskAction, TaskState } from "@/actions/task.action";
 import Link from "next/link";
+import SubmitButton from "@/components/SubmitButton";
 
 const initialState: TaskState = {};
 
@@ -34,7 +35,6 @@ export default function Page() {
                 name="title"
                 type="text"
                 placeholder="Enter task title"
-                defaultValue={state.values?.title}
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               />
               {state.errors?.title && (
@@ -51,36 +51,67 @@ export default function Page() {
               <textarea
                 name="description"
                 placeholder="Add a description..."
-                defaultValue={state.values?.description}
-                rows={4}
+                rows={3}
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
               />
             </div>
 
-            {/* Status */}
+            {/* Status + Priority */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium text-gray-700">
+                  Status
+                </label>
+                <select
+                  name="status"
+                  defaultValue="todo"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
+                >
+                  <option value="todo">To Do</option>
+                  <option value="in_progress">In Progress</option>
+                  <option value="done">Done</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium text-gray-700">
+                  Priority
+                </label>
+                <select
+                  name="priority"
+                  defaultValue="medium"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
+                >
+                  <option value="critical">🔴 Critical</option>
+                  <option value="high">🟠 High</option>
+                  <option value="medium">🟡 Medium</option>
+                  <option value="low">🔵 Low</option>
+                  <option value="lowest">⚪ Lowest</option>
+                </select>
+                {state.errors?.priority && (
+                  <p className="text-xs text-red-500">
+                    {state.errors.priority[0]}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Due date */}
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-medium text-gray-700">
-                Status
+                Due Date{" "}
+                <span className="text-gray-400 font-normal">(optional)</span>
               </label>
-              <select
-                name="status"
-                defaultValue="todo"
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none bg-white"
-              >
-                <option value="todo">To Do</option>
-                <option value="in_progress">In Progress</option>
-                <option value="done">Done</option>
-              </select>
+              <input
+                name="due_date"
+                type="date"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              />
             </div>
 
             {/* Buttons */}
             <div className="flex gap-3 pt-2">
-              <button
-                type="submit"
-                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-xl text-sm transition-colors"
-              >
-                Create Task
-              </button>
+              <SubmitButton label="Create Task" loadingLabel="Creating..." />
               <Link
                 href="/dashboard"
                 className="flex-1 text-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 rounded-xl text-sm transition-colors"

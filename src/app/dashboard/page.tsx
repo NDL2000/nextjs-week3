@@ -1,10 +1,10 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
 import { taskService } from "@/features/tasks/task.service";
-import { logoutAction } from "@/actions/auth.action";
 import Pagination from "@/components/Pagination";
 import Link from "next/link";
 import DeleteTaskButton from "@/components/DeleteTaskButton";
+import LogoutButton from "@/components/LogoutButton";
 
 const PAGE_SIZE = 5;
 
@@ -12,6 +12,14 @@ const statusConfig = {
   todo: { label: "To Do", className: "bg-gray-100 text-gray-600" },
   in_progress: { label: "In Progress", className: "bg-blue-50 text-blue-600" },
   done: { label: "Done", className: "bg-green-50 text-green-600" },
+};
+
+const priorityConfig = {
+  critical: { label: "🔴 Critical", className: "bg-red-50 text-red-600" },
+  high: { label: "🟠 High", className: "bg-orange-50 text-orange-600" },
+  medium: { label: "🟡 Medium", className: "bg-yellow-50 text-yellow-600" },
+  low: { label: "🔵 Low", className: "bg-blue-50 text-blue-600" },
+  lowest: { label: "⚪ Lowest", className: "bg-gray-50 text-gray-500" },
 };
 
 export default async function Page({
@@ -45,14 +53,7 @@ export default async function Page({
         </div>
         <div className="flex items-center gap-4">
           <span className="text-sm text-gray-500">Hi, {session.name}</span>
-          <form action={logoutAction}>
-            <button
-              type="submit"
-              className="px-4 py-2 rounded-xl text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
-            >
-              Logout
-            </button>
-          </form>
+          <LogoutButton />
         </div>
       </header>
 
@@ -104,10 +105,16 @@ export default async function Page({
                     Title
                   </th>
                   <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Description
+                    Status
                   </th>
                   <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    Status
+                    Priority
+                  </th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Due Date
+                  </th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Created
                   </th>
                   <th className="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                     Actions
@@ -123,15 +130,35 @@ export default async function Page({
                     <td className="px-5 py-4 font-medium text-gray-800">
                       {task.title}
                     </td>
-                    <td className="px-5 py-4 text-gray-500">
-                      {task.description ?? "—"}
-                    </td>
                     <td className="px-5 py-4">
                       <span
                         className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusConfig[task.status].className}`}
                       >
                         {statusConfig[task.status].label}
                       </span>
+                    </td>
+                    <td className="px-5 py-4">
+                      <span
+                        className={`px-2.5 py-1 rounded-full text-xs font-medium ${priorityConfig[task.priority].className}`}
+                      >
+                        {priorityConfig[task.priority].label}
+                      </span>
+                    </td>
+                    <td className="px-5 py-4 text-gray-500 text-sm">
+                      {task.due_date
+                        ? new Date(task.due_date).toLocaleDateString("en-GB", {
+                            day: "2-digit",
+                            month: "short",
+                            year: "numeric",
+                          })
+                        : "—"}
+                    </td>
+                    <td className="px-5 py-4 text-gray-400 text-xs">
+                      {new Date(task.created_at).toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
                     </td>
                     <td className="px-5 py-4">
                       <div className="flex gap-2">
@@ -148,7 +175,7 @@ export default async function Page({
                 {Array.from({ length: PAGE_SIZE - tasks.length }).map(
                   (_, i) => (
                     <tr key={`empty-${i}`}>
-                      <td className="px-5 py-4" colSpan={4}>
+                      <td className="px-5 py-4" colSpan={6}>
                         &nbsp;
                       </td>
                     </tr>

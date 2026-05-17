@@ -6,6 +6,8 @@ export const taskSchema = z.object({
   title: z.string().min(1, "Title is required").max(255),
   description: z.string().optional(),
   status: z.enum(["todo", "in_progress", "done"]),
+  priority: z.enum(["critical", "high", "medium", "low", "lowest"]),
+  due_date: z.string().optional(),
   user_id: z.string().min(1),
 });
 
@@ -21,15 +23,16 @@ export class ValidationError extends Error {
 }
 
 export const taskService = {
-  getAllForStats: async (userId: string): Promise<Task[]> => {
-    return await taskRepo.findAllForStats(userId);
-  },
-  
   getAll: async (
     userId: string,
     page: number = 1,
+    status?: string,
   ): Promise<{ data: Task[]; count: number }> => {
-    return await taskRepo.findAll(userId, page);
+    return await taskRepo.findAll(userId, page, status);
+  },
+
+  getAllForStats: async (userId: string): Promise<Task[]> => {
+    return await taskRepo.findAllForStats(userId);
   },
 
   getById: async (id: string): Promise<Task> => {

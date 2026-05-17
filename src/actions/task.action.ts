@@ -10,13 +10,10 @@ export type TaskState = {
     title?: string[];
     description?: string[];
     status?: string[];
+    priority?: string[];
+    due_date?: string[];
   };
   message?: string;
-  values?: {
-    title?: string;
-    description?: string;
-    status?: string;
-  };
 };
 
 export async function createTaskAction(
@@ -30,6 +27,13 @@ export async function createTaskAction(
     title: formData.get("title") as string,
     description: formData.get("description") as string,
     status: formData.get("status") as "todo" | "in_progress" | "done",
+    priority: formData.get("priority") as
+      | "critical"
+      | "high"
+      | "medium"
+      | "low"
+      | "lowest",
+    due_date: (formData.get("due_date") as string) || undefined,
     user_id: session.id,
   };
 
@@ -43,14 +47,7 @@ export async function createTaskAction(
         if (!fieldErrors[field]) fieldErrors[field] = [];
         fieldErrors[field].push(err.message);
       }
-      return { 
-        errors: fieldErrors as TaskState["errors"],
-        values: {
-          title: data.title,
-          description: data.description,
-          status: data.status,
-        }
-      };
+      return { errors: fieldErrors as TaskState["errors"] };
     }
     return { message: error.message };
   }
@@ -68,6 +65,13 @@ export async function updateTaskAction(
     title: formData.get("title") as string,
     description: formData.get("description") as string,
     status: formData.get("status") as "todo" | "in_progress" | "done",
+    priority: formData.get("priority") as
+      | "critical"
+      | "high"
+      | "medium"
+      | "low"
+      | "lowest",
+    due_date: (formData.get("due_date") as string) || undefined,
   };
 
   try {
